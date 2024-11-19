@@ -154,10 +154,10 @@
                         <a class="nav-link" href="categories">Kategori</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Transaksi Pembelian</a>
+                        <a class="nav-link" href="Transaction">Transaksi Pembelian</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Laporan Karyawan</a>
+                        <a class="nav-link" href="Laporan">Laporan Karyawan</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="accounts">Tambah Akun</a>
