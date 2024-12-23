@@ -1,81 +1,74 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Transaction;
-use App\Models\Agent;
-use App\Models\Item;
 use Illuminate\Http\Request;
 
 class TransactionController extends Controller
 {
-    public function index()
+
+    public function destroy($id)
     {
-        $transactions = Transaction::with('agent', 'item.category')->get();
-        return view('transactions.index', compact('transactions'));
+    $transaction = Transaction::findOrFail($id);
+    $transaction->delete();
+
+    return redirect()->route('transaction.index')->with('success', 'Transaksi berhasil dihapus!');
+}
+
+
+
+    public function store(Request $request)
+    {
+        // Validasi data yang diterima
+        $validatedData = $request->validate([
+            'customer_name' => 'required|string|max:255',
+            'item_name' => 'required|string|max:255',
+            'quantity' => 'required|integer|min:1',
+            'price' => 'required|numeric|min:0',
+        ]);
+
+        // Simpan data transaksi ke database
+        Transaction::create($validatedData);
+
+        // Redirect ke halaman daftar transaksi dengan pesan sukses
+        return redirect()->route('transaction.index')->with('success', 'Transaksi berhasil ditambahkan!');
     }
 
     public function create()
     {
-        $agents = Agent::all();
-        $items = Item::all();
-        return view('transactions.create', compact('agents', 'items'));
+        // Menampilkan form untuk menambah transaksi baru
+        return view('transaction.create');
     }
 
-    public function store(Request $request)
+
+    public function index()
+    {
+        // Mengambil semua data transaksi dari database
+        $transactions = transaction::all();
+
+        // Mengembalikan view transactions.index dengan data
+        return view('transaction.index', compact('transactions'));
+    }
+
+    public function edit($id)
+    {
+        $transaction = transaction::findOrFail($id);
+        return view('transaction.edit', compact('transaction'));
+    }
+    
+    public function update(Request $request, $id)
     {
         $request->validate([
-            'agent_id' => 'required|exists:agents,id',
-            'item_id' => 'required|exists:items,id',
-            'quantity' => 'required|integer|min:1',
-            'unit_price' => 'required|numeric|min:0',
-            'payment_method' => 'required|string',
-        ]);
-
-        $item = Item::find($request->item_id);
-        $total_price = $request->quantity * $request->unit_price;
-
-        Transaction::create([
-            'agent_id' => $request->agent_id,
-            'item_id' => $request->item_id,
-            'quantity' => $request->quantity,
-            'unit_price' => $request->unit_price,
-            'total_price' => $total_price,
-            'payment_method' => $request->payment_method,
-        ]);
-
-        return redirect()->route('transactions.index')->with('success', 'Transaksi berhasil ditambahkan');
-    }
-
-    public function edit(Transaction $transaction)
-    {
-        $agents = Agent::all();
-        $items = Item::all();
-        return view('transactions.edit', compact('transaction', 'agents', 'items'));
-    }
-    public function update(Request $request, Transaction $transaction)
-    {
-        // Validasi data yang diinputkan
-        $request->validate([
-            'agent_id' => 'required|exists:agents,id',
-            'item_id' => 'required|exists:items,id',
-            'category_id' => 'required|exists:categories,id',
-            'jumlah' => 'required|integer|min:1',
-            'harga_satuan' => 'required|numeric|min:0',
-            'metode_pembayaran' => 'required|string',
+            'customer_name' => 'required|string|max:255',
+            'item_name' => 'required|string|max:255',
+            'quantity' => 'required|integer',
+            'price' => 'required|numeric|min:0',
         ]);
     
-        // Update data transaksi di database
-        $transaction->update([
-            'agent_id' => $request->agent_id,
-            'item_id' => $request->item_id,
-            'category_id' => $request->category_id,
-            'jumlah' => $request->jumlah,
-            'harga_satuan' => $request->harga_satuan,
-            'total_harga' => $request->jumlah * $request->harga_satuan,
-            'metode_pembayaran' => $request->metode_pembayaran,
-        ]);
+        $transaction = Transaction::findOrFail($id);
+        $transaction->update($request->all());
     
-        // Arahkan kembali ke halaman index transaksi dengan pesan sukses
-        return redirect()->route('transactions.index')->with('success', 'Transaksi berhasil diperbarui.');
-    }
+        return redirect()->route('transaction.index')->with('success', 'Transaksi berhasil diperbarui.');
+}
 }

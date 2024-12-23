@@ -3,113 +3,117 @@
 namespace App\Http\Controllers;
 
 use App\Models\Item;
-use App\Models\Category; // Pastikan huruf besar pada 'C'
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class ItemController extends Controller
 {
-    // Menampilkan daftar barang
+    /**
+     * Menampilkan daftar barang.
+     */
     public function index()
     {
-        $items = Item::with('category')->get(); // Ambil barang dengan relasi kategori
+        $items = Item::with('category')->paginate(10);
         return view('items.index', compact('items'));
     }
 
-    // Menampilkan form pembuatan barang
+    /**
+     * Menampilkan form untuk menambah barang.
+     */
     public function create()
     {
         $categories = Category::all(); // Ambil semua kategori
-        return view('items.create', compact('categories')); // Kirim data kategori ke view
+        return view('items.create', compact('categories'));
     }
 
-    // Menyimpan barang baru
+    /**
+     * Menyimpan barang baru.
+     */
     public function store(Request $request)
     {
-        $request->validate([
+        // Validasi data
+        $validated = $request->validate([
             'nama_barang' => 'required|string|max:255',
+            'category_id' => 'required|exists:categories,id',
             'harga' => 'required|numeric',
+            'netto' => 'required|numeric',  // Validasi Netto dalam gram
             'jumlah' => 'required|integer',
-            'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'kategori' => 'required|string', // Validasi kategori harus ada
+            'gambar' => 'nullable|image',
         ]);
-    
-        // Proses penyimpanan data
-        $imageName = null;
-        if ($request->hasFile('gambar')) {
-            $imageName = time() . '.' . $request->gambar->extension();
-            $request->gambar->move(public_path('images'), $imageName);
-        }
-    
-        Item::create([
-            'nama_barang' => $request->nama_barang,
-            'harga' => $request->harga,
-            'jumlah' => $request->jumlah,
-            'gambar' => $imageName,
-            'kategori' => $request->kategori, // Simpan kategori
-        ]);
-    
-        return redirect()->route('items.index')->with('success', 'Item berhasil ditambahkan.');
-    }
-    
 
-    // Menampilkan halaman edit barang
+        // Menyimpan data barang baru
+        $item = new Item;
+        $item->nama_barang = $request->nama_barang;
+        $item->category_id = $request->category_id;
+        $item->harga = $request->harga;
+        $item->netto = $request->netto;  // Menyimpan Netto dalam gram
+        $item->jumlah = $request->jumlah;
+
+        // Menyimpan gambar jika ada
+        if ($request->hasFile('gambar')) {
+            $item->gambar = $request->gambar->store('public/images');
+        }
+
+        $item->save();  // Simpan item ke database
+
+        return redirect()->route('items.index')->with('success', 'Barang berhasil ditambahkan');
+    }
+
+    /**
+     * Menampilkan form untuk mengedit barang.
+     */
     public function edit(Item $item)
     {
-        $categories = Category::all(); // Ambil semua kategori untuk pilihan edit
+        $categories = Category::all();  // Ambil semua kategori
         return view('items.edit', compact('item', 'categories'));
     }
 
-    // Memperbarui barang
+    /**
+     * Mengupdate data barang.
+     */
     public function update(Request $request, Item $item)
     {
-        // Validasi input
-        $request->validate([
+        // Validasi data
+        $validated = $request->validate([
             'nama_barang' => 'required|string|max:255',
-            'category_id' => 'required|exists:categories,id', // Validasi kategori
+            'category_id' => 'required|exists:categories,id',
             'harga' => 'required|numeric',
+            'netto' => 'required|numeric',  // Validasi Netto dalam gram
             'jumlah' => 'required|integer',
-            'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'gambar' => 'nullable|image',
         ]);
 
-        // Simpan gambar jika ada
-        if ($request->hasFile('gambar')) {
-            if ($item->gambar) {
-                // Hapus gambar lama
-                $oldImagePath = public_path('images/' . $item->gambar);
-                if (file_exists($oldImagePath)) {
-                    unlink($oldImagePath);
-                }
-            }
-
-            $imageName = time() . '.' . $request->gambar->extension();
-            $request->gambar->move(public_path('images'), $imageName);
-            $item->gambar = $imageName; // Update gambar
-        }
-
-        // Update data barang
+        // Mengupdate data barang
         $item->update([
             'nama_barang' => $request->nama_barang,
             'category_id' => $request->category_id,
             'harga' => $request->harga,
+            'netto' => $request->netto,  // Menyimpan Netto dalam gram
             'jumlah' => $request->jumlah,
         ]);
 
-        return redirect()->route('items.index')->with('success', 'Barang berhasil diperbarui.');
-    }
-
-    // Menghapus barang
-    public function destroy(Item $item)
-    {
-        if ($item->gambar) {
-            // Hapus gambar
-            $oldImagePath = public_path('images/' . $item->gambar);
-            if (file_exists($oldImagePath)) {
-                unlink($oldImagePath);
-            }
+        // Mengupdate gambar jika ada
+        if ($request->hasFile('gambar')) {
+            $item->gambar = $request->gambar->store('public/images');
         }
 
-        $item->delete();
+        $item->save();  // Simpan perubahan ke database
 
-        return redirect()->route('items.index')->with('success', 'Barang berhasil dihapus.');
+        return redirect()->route('items.index')->with('success', 'Barang berhasil diperbarui');
+    }
+
+    /**
+     * Menghapus barang.
+     */
+    public function destroy(Item $item)
+    {
+        // Menghapus gambar jika ada
+        if ($item->gambar) {
+            unlink(storage_path('app/' . $item->gambar));
+        }
+
+        $item->delete();  // Menghapus item dari database
+
+        return redirect()->route('items.index')->with('success', 'Barang berhasil dihapus');
     }
 }

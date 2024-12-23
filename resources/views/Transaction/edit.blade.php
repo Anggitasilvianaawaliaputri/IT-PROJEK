@@ -2,71 +2,71 @@
 
 @section('content')
 <div class="container">
-    <h1 class="text-center mb-4">Edit Transaksi Pembelian</h1>
+    <h1>Edit Transaksi</h1>
+    
+    <!-- Tampilkan error jika ada -->
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
-    <form action="{{ route('transactions.update', $transaction->id) }}" method="POST">
+    <!-- Form untuk mengedit transaksi -->
+    <form action="{{ route('transaction.update', $transaction->id) }}" method="POST">
         @csrf
         @method('PUT')
 
-        <!-- Dropdown untuk memilih agen -->
         <div class="mb-3">
-            <label for="agent_id" class="form-label">Nama Agen</label>
-            <select class="form-control" id="agent_id" name="agent_id" required>
-                @foreach($agents as $agent)
-                    <option value="{{ $agent->id }}" {{ $transaction->agent_id == $agent->id ? 'selected' : '' }}>{{ $agent->nama }}</option>
-                @endforeach
-            </select>
+            <label for="customer_name" class="form-label">Nama Pemilik</label>
+            <input 
+                type="text" 
+                name="customer_name" 
+                id="customer_name" 
+                class="form-control" 
+                value="{{ old('customer_name', $transaction->customer_name) }}" 
+                required>
         </div>
 
-        <!-- Dropdown untuk memilih barang -->
         <div class="mb-3">
-            <label for="item_id" class="form-label">Nama Barang</label>
-            <select class="form-control" id="item_id" name="item_id" required>
-                @foreach($items as $item)
-                    <option value="{{ $item->id }}" {{ $transaction->item_id == $item->id ? 'selected' : '' }}>{{ $item->nama_barang }}</option>
-                @endforeach
-            </select>
+            <label for="item_name" class="form-label">Nama Barang</label>
+            <input 
+                type="text" 
+                name="item_name" 
+                id="item_name" 
+                class="form-control" 
+                value="{{ old('item_name', $transaction->item_name) }}" 
+                required>
         </div>
 
-        <!-- Dropdown untuk memilih kategori -->
         <div class="mb-3">
-            <label for="category_id" class="form-label">Kategori</label>
-            <select class="form-control" id="category_id" name="category_id" required>
-                @foreach($categories as $category)
-                    <option value="{{ $category->id }}" {{ $transaction->category_id == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
-                @endforeach
-            </select>
+            <label for="quantity" class="form-label">Jumlah</label>
+            <input 
+                type="number" 
+                name="quantity" 
+                id="quantity" 
+                class="form-control" 
+                value="{{ old('quantity', $transaction->quantity) }}" 
+                required>
         </div>
 
-        <!-- Input jumlah -->
         <div class="mb-3">
-            <label for="jumlah" class="form-label">Jumlah</label>
-            <input type="number" class="form-control" id="jumlah" name="jumlah" value="{{ $transaction->jumlah }}" required>
+            <label for="price" class="form-label">Harga</label>
+            <input 
+                type="number" 
+                name="price" 
+                id="price" 
+                class="form-control" 
+                value="{{ old('price', $transaction->price) }}" 
+                step="0.01" 
+                required>
         </div>
 
-        <!-- Input harga satuan -->
-        <div class="mb-3">
-            <label for="harga_satuan" class="form-label">Harga Satuan</label>
-            <input type="number" class="form-control" id="harga_satuan" name="harga_satuan" value="{{ $transaction->harga_satuan }}" required>
-        </div>
-
-        <!-- Total Harga (hanya menampilkan, tidak bisa diinput) -->
-        <div class="mb-3">
-            <label for="total_harga" class="form-label">Total Harga</label>
-            <input type="text" class="form-control" id="total_harga" value="Rp {{ number_format($transaction->total_harga, 0, ',', '.') }}" disabled>
-        </div>
-
-        <!-- Dropdown untuk memilih metode pembayaran -->
-        <div class="mb-3">
-            <label for="metode_pembayaran" class="form-label">Metode Pembayaran</label>
-            <select class="form-control" id="metode_pembayaran" name="metode_pembayaran" required>
-                <option value="cash" {{ $transaction->metode_pembayaran == 'cash' ? 'selected' : '' }}>Cash</option>
-                <option value="transfer" {{ $transaction->metode_pembayaran == 'transfer' ? 'selected' : '' }}>Transfer</option>
-            </select>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Update Transaksi</button>
-        <a href="{{ route('transactions.index') }}" class="btn btn-secondary">Kembali</a>
+        <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+        <a href="{{ route('transaction.index') }}" class="btn btn-secondary">Batal</a>
     </form>
 </div>
 @endsection

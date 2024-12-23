@@ -2,23 +2,16 @@
 
 @section('content')
 <div class="container">
-    <h1 class="text-center mb-4">Cek Barang</h1>
-    
-    <a href="{{ route('items.create') }}" class="btn btn-primary mb-3">+ Tambah Barang</a>
-
-    @if (session('success'))
-        <div class="alert alert-success" id="success-alert">
-            {{ session('success') }}
-        </div>
-    @endif
-
-    <table class="table table-striped">
-        <thead class="thead-dark">
+    <h2>Daftar Barang</h2>
+    <a href="{{ route('items.create') }}" class="btn btn-primary">Tambah Barang</a>
+    <table class="table table-bordered mt-3 text-center">
+        <thead>
             <tr>
                 <th>No</th>
                 <th>Gambar</th>
                 <th>Nama Barang</th>
                 <th>Kategori</th>
+                <th>Netto</th> <!-- Kolom Netto -->
                 <th>Harga</th>
                 <th>Jumlah</th>
                 <th>Aksi</th>
@@ -26,46 +19,32 @@
         </thead>
         <tbody>
             @foreach ($items as $index => $item)
-                <tr>
-                    <td>{{ $index + 1 }}</td>
-                    <td>
-                        @if ($item->gambar)
-                            <img src="{{ asset('images/'.$item->gambar) }}" alt="{{ $item->nama_barang }}" width="50">
-                        @else
-                            <img src="{{ asset('images/default.png') }}" alt="default" width="50">
-                        @endif
-                    </td>
-                    <td>{{ $item->nama_barang }}</td>
-                    <td>{{ $item->kategori }}</td>
-                    <td>Rp {{ number_format($item->harga, 0, ',', '.') }}</td>
-                    <td>{{ $item->jumlah }}</td>
-                    <td>
-                        <a href="{{ route('items.edit', $item->id) }}" class="btn btn-warning">Edit</a>
-                        <form action="{{ route('items.destroy', $item->id) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger">Hapus</button>
-                        </form>
-                    </td>
-                </tr>
+            <tr>
+                <td>{{ $index + 1 }}</td>
+                <td>
+                    @if ($item->gambar)
+                        <img src="{{ asset('storage/' . $item->gambar) }}" alt="Gambar" width="50">
+                    @else
+                        <span class="text-muted">Tidak ada gambar</span>
+                    @endif
+                </td>
+                <td>{{ $item->nama_barang }}</td>
+                <td>{{ $item->category->name ?? 'Tidak ada kategori' }}</td>
+                <td>{{ $item->netto }} gr </td> <!-- Menampilkan Netto -->
+                <td>Rp {{ number_format($item->harga, 0, ',', '.') }}</td>
+                <td>{{ $item->jumlah }}</td>
+                <td>
+                    <a href="{{ route('items.edit', $item->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                    <form action="{{ route('items.destroy', $item->id) }}" method="POST" class="d-inline">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin hapus?')">Hapus</button>
+                    </form>
+                </td>
+            </tr>
             @endforeach
         </tbody>
     </table>
+    {{ $items->links() }}
 </div>
-
-<script>
-    // Menghilangkan notifikasi setelah 5 detik
-    window.onload = function() {
-        var alert = document.getElementById('success-alert');
-        if (alert) {
-            setTimeout(function() {
-                alert.style.transition = 'opacity 0.5s ease';
-                alert.style.opacity = '0';
-                setTimeout(function() {
-                    alert.style.display = 'none';
-                }, 500);
-            }, 5000);
-        }
-    };
-</script>
 @endsection

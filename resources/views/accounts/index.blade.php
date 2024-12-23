@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <h1 class="text-center mb-4">Daftar Akun</h1>
-    <a href="{{ route('accounts.create') }}" class="btn btn-primary mb-3">+ Tambah Akun</a>
+    <a href="{{ route('accounts.create') }}" class="btn btn-primary mb-3">Tambah Akun</a>
     
     @if (session('success'))
         <div class="alert alert-success" id="success-alert">
@@ -30,11 +30,11 @@
                         <td>{{ $account->email }}</td>
                         <td>{{ $account->jabatan }}</td>
                         <td>
-                            <a href="{{ route('accounts.edit', $account->id) }}" class="btn btn-warning">Edit</a>
+                            <center><a href="{{ route('accounts.edit', $account->id) }}" class="btn btn-warning">Edit</a>
                             <form action="{{ route('accounts.destroy', $account->id) }}" method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger">Hapus</button>
+                                <button type="submit" class="btn btn-danger">Hapus</button></center>
                             </form>
                         </td>
                     </tr>
@@ -75,10 +75,16 @@
     th {
         background-color: #007bff;
         color: white;
+        text-align: center;
     }
 
     tr:nth-child(even) {
         background-color: #f9f9f9;
+    
+    }
+
+    button {
+        text-align: center;
     }
 </style>
 @endsection

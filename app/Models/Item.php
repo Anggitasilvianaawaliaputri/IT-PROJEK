@@ -11,10 +11,11 @@ class Item extends Model
 
     protected $fillable = [
         'nama_barang',
-        'kategori',
+        'category_id',
         'harga',
         'jumlah',
         'gambar',
+        'netto',
     ];
 
     public function transactions()
@@ -24,7 +25,9 @@ class Item extends Model
 
     // Relasi ke Category
     public function category()
-    {
-        return $this->belongsTo(Category::class);
-    }
+{
+    return $this->belongsTo(Category::class, 'category_id', 'id');
 }
+
+}
+

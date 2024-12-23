@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container">
-        <h1>Edit Akun</h1>
+        <center><h1>Edit Akun</h1></center>
         <form action="{{ route('accounts.update', $account->id) }}" method="POST" class="form-edit">
             @csrf
             @method('PUT')

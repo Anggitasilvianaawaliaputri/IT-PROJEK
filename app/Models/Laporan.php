@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,5 +14,5 @@ class Laporan extends Model
     protected $fillable = ['nama_karyawan', 'tanggal', 'pendapatan'];
     
     // Jika tabel sudah dinamai 'posts', tidak perlu menyetel $table
-    protected $table = 'Laporan';
+    protected $table = 'laporan';
 }

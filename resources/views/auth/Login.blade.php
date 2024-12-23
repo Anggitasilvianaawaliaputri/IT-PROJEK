@@ -1,138 +1,61 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modern Login</title>
+    <title>Masuk</title>
+    <!-- Tambahkan Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
-        }
-
         body {
-            background-color: #e9ecef;
+            background-color: #f8f9fa;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            margin: 0;
         }
-
         .login-container {
-            background-color: white;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
             max-width: 400px;
             width: 100%;
+        }
+        .login-header {
             text-align: center;
-        }
-
-        .login-container h2 {
             margin-bottom: 20px;
+        }
+        .login-header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
             color: #343a40;
-        }
-
-        .input-group {
-            margin-bottom: 25px;
-            position: relative;
-        }
-
-        .input-group input {
-            width: 100%;
-            padding: 12px 10px;
-            border: 2px solid #ced4da;
-            border-radius: 8px;
-            font-size: 16px;
-            outline: none;
-            transition: border-color 0.3s;
-        }
-
-        .input-group input:focus {
-            border-color: #007bff;
-        }
-
-        .input-group label {
-            position: absolute;
-            left: 12px;
-            top: 10px;
-            transition: 0.2s;
-            color: #6c757d;
-            pointer-events: none;
-        }
-
-        .input-group input:focus + label,
-        .input-group input:valid + label {
-            top: -10px;
-            font-size: 12px;
-            color: #007bff;
-        }
-
-        .toggle-password {
-            position: absolute;
-            right: 10px;
-            top: 10px;
-            cursor: pointer;
-            color: #007bff;
-        }
-
-        .login-btn {
-            width: 100%;
-            padding: 12px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .login-btn:hover {
-            background-color: #0056b3;
-        }
-
-        .signup-text {
-            margin-top: 20px;
-        }
-
-        .signup-text a {
-            color: #007bff;
-            text-decoration: none;
         }
     </style>
 </head>
 <body>
     <div class="login-container">
-        <h2>Login</h2>
-        <form>
-            <div class="input-group">
-                <input type="text" id="username" required>
-                <label for="username">Username</label>
+        <div class="login-header">
+            <h1>Masuk</h1>
+        </div>
+        <form method="POST" action="{{ route('login') }}">
+            @csrf
+            <div class="mb-3">
+                <label for="email" class="form-label">Alamat Email</label>
+                <input type="email" name="email" class="form-control" id="email" placeholder="Masukkan email Anda" required>
             </div>
-            <div class="input-group">
-                <input type="password" id="password" required>
-                <label for="password">Password</label>
-                <span class="toggle-password" onclick="togglePassword()">👁</span>
+            <div class="mb-3">
+                <label for="password" class="form-label">Kata Sandi</label>
+                <input type="password" name="password" class="form-control" id="password" placeholder="Masukkan kata sandi Anda" required>
             </div>
-            <button type="submit" class="login-btn">Sign In</button>
+            <button type="submit" class="btn btn-primary w-100">Masuk</button>
         </form>
+        <div class="text-center mt-3">
+            <p class="text-muted">Belum punya akun? <a href="{{ route('register') }}">Daftar di sini</a></p>
+        </div>
     </div>
-
-    <script>
-        function togglePassword() {
-            const passwordField = document.getElementById('password');
-            const toggleIcon = document.querySelector('.toggle-password');
-            if (passwordField.type === 'password') {
-                passwordField.type = 'text';
-                toggleIcon.textContent = '🙈'; // Ganti ikon saat password terlihat
-            } else {
-                passwordField.type = 'password';
-                toggleIcon.textContent = '👁'; // Ganti ikon saat password tersembunyi
-            }
-        }
-    </script>
+    <!-- Tambahkan Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
