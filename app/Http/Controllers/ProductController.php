@@ -176,12 +176,14 @@ class ProductController extends Controller
         $request->validate([
             'nama' => 'required|string|max:255',
             'harga' => 'required|numeric|min:0',
+            'jumlah' => 'nullable|numeric|min:1',
         ]);
 
         $product = Produk::findOrFail($id);
         $product->update([
             'nama' => $request->nama,
             'harga' => $request->harga,
+            'jumlah' => $request->jumlah,
         ]);
 
         return redirect()->route('products.index')->with('success', 'Produk berhasil diperbarui!');
@@ -213,11 +215,13 @@ class ProductController extends Controller
         $request->validate([
             'nama' => 'required|string|max:255',
             'harga' => 'required|numeric|min:0',
+            'jumlah' => 'nullable|numeric|min:1',
         ]);
 
         Produk::create([
             'nama' => $request->nama,
             'harga' => $request->harga,
+            'jumlah' => $request->jumlah,
         ]);
 
         return redirect()->route('products.index')->with('success', 'Produk berhasil ditambahkan!');
@@ -280,4 +284,6 @@ class ProductController extends Controller
         return view('ranking', ['produkSkor' => $produkSkor]);
     }
 
+
+    
 }

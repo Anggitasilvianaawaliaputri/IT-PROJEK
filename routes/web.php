@@ -19,6 +19,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\ProductScoreController;
 
 // Rute untuk tampilan laporan (index)
 Route::get('report', [ReportController::class, 'index'])->name('report.index');

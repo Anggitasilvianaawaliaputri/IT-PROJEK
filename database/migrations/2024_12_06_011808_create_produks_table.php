@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nama');
             $table->decimal('harga', 10, 2);
+            $table->string('jumlah')->nullable();  // Menambahkan kolom jumlah
             $table->text('deskripsi')->nullable();
             $table->timestamps();
         });

@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h2>Daftar Barang</h2>
+    <h1 class="text-center mb-4">Daftar Barang</h1>
     <a href="{{ route('items.create') }}" class="btn btn-primary">Tambah Barang</a>
     <table class="table table-bordered mt-3 text-center">
         <thead>
