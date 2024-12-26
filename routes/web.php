@@ -14,12 +14,24 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\SalesController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\AccountController;
-use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\RevenueController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ProductScoreController;
+
+
+// Rute untuk mencetak laporan pendapatan
+Route::post('/report/print', [ReportController::class, 'print'])->name('report.print');
+// Rute untuk menampilkan laporan pendapatan
+Route::get('/report', [ReportController::class, 'index'])->name('report.index');
+// Rute untuk mencetak laporan berdasarkan ID
+Route::post('/report/{id}/print', [ReportController::class, 'print'])->name('report.print');
+// Menampilkan formulir untuk menghitung pendapatan
+Route::get('/revenue', [RevenueController::class, 'indexForm'])->name('revenue.form');
+// Menyimpan dan menghitung pendapatan (metode POST)
+Route::post('/revenue', [RevenueController::class, 'index'])->name('revenue.index');
 
 // Rute untuk tampilan laporan (index)
 Route::get('report', [ReportController::class, 'index'])->name('report.index');
@@ -44,29 +56,6 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
-
-
-
-// Route untuk menampilkan laporan
-Route::get('/laporan', function () {
-    $posts = Laporan::all();
-    return view('laporan', ['posts' => $posts]);
-})->name('laporan.index');
-
-// Route untuk menampilkan daftar laporan
-Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
-
-// Route untuk menampilkan halaman edit laporan
-Route::get('/laporan/{post}/edit', [LaporanController::class, 'showEditScreen'])->name('post.edit');
-
-// Route untuk update laporan
-Route::put('/laporan/{post}', [LaporanController::class, 'actuallyUpdatePost'])->name('post.update');
-
-// Route untuk menyimpan laporan baru
-Route::post('/laporan', [LaporanController::class, 'createPost'])->name('post.create');
-
-// Route untuk menghapus laporan
-Route::delete('/laporan/{post}', [LaporanController::class, 'destroy'])->name('post.destroy');
 
 
 // Rute untuk menampilkan semua postingan di view "kelola_akun"

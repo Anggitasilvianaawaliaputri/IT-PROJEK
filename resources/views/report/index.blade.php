@@ -1,61 +1,36 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <h1 class="text-center mb-4">Laporan Penjualan</h1>
-    
-    <a href="{{ route('report.create') }}" class="btn btn-primary mb-3">Tambah Laporan</a>
+<div class="container mt-5">
+    <h1 class="text-center">Laporan Pendapatan</h1>
 
-    @if (session('success'))
-        <div class="alert alert-success" id="success-alert">
-            {{ session('success') }}
-        </div>
-    @endif
-    <table class="table table-striped table-bordered">
-        <table class="table table-bordered text-center">
-        <thead class="thead-dark">
+    <!-- Tabel Laporan Pendapatan -->
+    <table class="table table-bordered mt-4">
+        <thead>
             <tr>
                 <th>No</th>
-                <th>Nama Karyawan</th>
                 <th>Tanggal</th>
-                <th>Pendapatan</th>
+                <th>Hasil Pendapatan</th>
                 <th>Aksi</th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($laporan as $index => $report) <!-- Ganti $reports menjadi $laporan -->
+            @foreach ($pendapatan as $index => $item)
                 <tr>
                     <td>{{ $index + 1 }}</td>
-                    <td>{{ $report->nama_karyawan }}</td>
-                    <td>{{ \Carbon\Carbon::parse($report->tanggal)->format('d-m-Y') }}</td>
-                    <td>Rp {{ number_format($report->pendapatan, 0, ',', '.') }}</td>
+                    <td>{{ $item->tanggal_awal }} - {{ $item->tanggal_akhir }}</td>
+                    <td>Rp {{ number_format($item->pendapatan, 0, ',', '.') }}</td>
                     <td>
-                        <a href="{{ route('report.edit', $report->id) }}" class="btn btn-warning">Edit</a>
-                        <form action="{{ route('report.destroy', $report->id) }}" method="POST" style="display:inline;">
+                        <form action="{{ route('report.print', $item->id) }}" method="POST" target="_blank">
                             @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger">Hapus</button>
+                            <button type="submit" class="btn btn-primary">Cetak</button>
                         </form>
                     </td>
                 </tr>
             @endforeach
         </tbody>
     </table>
-</div>
 
-<script>
-    // Menghilangkan notifikasi setelah 5 detik
-    window.onload = function() {
-        var alert = document.getElementById('success-alert');
-        if (alert) {
-            setTimeout(function() {
-                alert.style.transition = 'opacity 0.5s ease';
-                alert.style.opacity = '0';
-                setTimeout(function() {
-                    alert.style.display = 'none';
-                }, 500);
-            }, 5000);
-        }
-    };
-</script>
+    <!-- Tombol untuk kembali -->
+</div>
 @endsection

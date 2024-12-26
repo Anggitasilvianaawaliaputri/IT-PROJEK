@@ -10,7 +10,7 @@ class Report extends Model
     use HasFactory;
     
     // Kolom yang dapat diisi secara massal (mass assignment)
-    protected $fillable = ['nama_karyawan', 'tanggal', 'pendapatan'];
+    protected $fillable = [ 'tanggal', 'pendapatan'];
     
     // Jika tabel sudah dinamai 'posts', tidak perlu menyetel $table
     protected $table = 'report';
