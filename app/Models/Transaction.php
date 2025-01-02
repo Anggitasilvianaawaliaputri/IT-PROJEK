@@ -37,9 +37,5 @@ class Transaction extends Model
 {
     return $this->belongsToMany(Item::class, 'transaction_item', 'transaction_id', 'item_id')
                 ->withPivot('quantity', 'unit_price', 'total_price');
-<<<<<<< HEAD
-=======
-}
->>>>>>> 0b20dd9556bf69cbebeb53ee86184fd06cedf2d6
 }
 }

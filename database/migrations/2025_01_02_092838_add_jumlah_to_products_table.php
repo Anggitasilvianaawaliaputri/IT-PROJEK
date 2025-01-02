@@ -11,16 +11,19 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('products', function (Blueprint $table) {
-            $table->integer('jumlah')->default(0); // Sesuaikan tipe data sesuai kebutuhan
-        });
+        if (!Schema::hasColumn('produks', 'jumlah')) {
+            Schema::table('produks', function (Blueprint $table) {
+                $table->numeric('jumlah')->default(0);
+            });
+        }
     }
     
     public function down()
     {
-        Schema::table('products', function (Blueprint $table) {
-            $table->dropColumn('jumlah');
-        });
+        if (Schema::hasColumn('produks', 'jumlah')) {
+            Schema::table('produks', function (Blueprint $table) {
+                $table->dropColumn('jumlah');
+            });
+        }
     }
-    
-};
+};    

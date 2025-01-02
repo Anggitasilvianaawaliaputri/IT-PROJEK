@@ -121,6 +121,7 @@ Route::get('/Transaction/{id}/edit', [TransactionController::class, 'edit'])->na
 Route::put('/Transaction/{id}', [TransactionController::class, 'update'])->name('transaction.update');
 Route::delete('/Transaction/{id}', [TransactionController::class, 'destroy'])->name('transaction.destroy');
 Route::resource('transactions', TransactionController::class);
+Route::get('/transactions', [TransactionController::class, 'index'])->name('transactions.index');
 
 
 // Menampilkan daftar transaksi

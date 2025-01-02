@@ -15,7 +15,9 @@ class TransactionController extends Controller
     public function index()
     {
         $transactions = Transaction::all(); // Ambil data transaksi (contoh)
-        return view('transactions.index', compact('transactions'));
+        return view('transaction.index', compact('transactions'));
+    return view('transaction.index');
+
     }
 
     // Tampilkan form tambah transaksi
@@ -24,7 +26,7 @@ class TransactionController extends Controller
         $agents = Agent::all();
         $categories = Category::all();
 
-        return view('transactions.create', compact('agents', 'categories'));
+        return view('transaction.create', compact('agents', 'categories'));
     }
 
     // Tampilkan detail transaksi
@@ -32,10 +34,10 @@ class TransactionController extends Controller
 {
     try {
         $transaction = Transaction::with(['agent', 'category'])->findOrFail($id);
-        return view('transactions.show', compact('transaction'));
+        return view('transaction.show', compact('transaction'));
     } catch (\Exception $e) {
         Log::error('Error fetching transaction:', ['error' => $e->getMessage()]);
-        return redirect()->route('transactions.index')->withErrors(['message' => 'Transaksi tidak ditemukan.']);
+        return redirect()->route('transaction.index')->withErrors(['message' => 'Transaksi tidak ditemukan.']);
     }
 }
 
@@ -70,7 +72,7 @@ class TransactionController extends Controller
             // Simpan transaksi ke database
             Transaction::create($validatedData);
 
-            return redirect()->route('transactions.index')->with('success', 'Transaksi berhasil disimpan.');
+            return redirect()->route('transaction.index')->with('success', 'Transaksi berhasil disimpan.');
         } catch (\Exception $e) {
             Log::error('Error saving transaction:', ['error' => $e->getMessage()]);
             return redirect()->back()->withErrors(['message' => 'Terjadi kesalahan saat menyimpan transaksi.']);
