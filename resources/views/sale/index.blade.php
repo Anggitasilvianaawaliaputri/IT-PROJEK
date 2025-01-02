@@ -24,6 +24,7 @@
                 <th>Harga</th>
                 <th>Jumlah</th>
                 <th>Subtotal</th>
+                <th>Netto</th>
                 <th>Metode Pembayaran</th>
                 <th>Aksi</th>
             </tr>
@@ -37,6 +38,13 @@
                     <td>Rp {{ number_format($data->harga, 0, ',', '.') }}</td>
                     <td>{{ $data->jumlah }}</td>
                     <td>Rp {{ number_format($data->subtotal, 0, ',', '.') }}</td>
+                    <td>
+                        @if (is_numeric($data->netto))
+                            {{ number_format($data->netto, 0, ',', '.') }}
+                        @else
+                            {{ $data->netto }}
+                        @endif
+                    </td>
                     <td>{{ $data->metode_pembayaran }}</td>
                     <td>
                         <!-- Tombol Edit -->

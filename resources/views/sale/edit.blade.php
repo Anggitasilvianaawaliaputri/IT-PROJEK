@@ -8,11 +8,6 @@
     <form action="{{ route('sale.update', $transaction->id) }}" method="POST">
         @csrf
         @method('PUT')
-
-        <div class="mb-3">
-            <label for="nama_karyawan" class="form-label">Nama Karyawan:</label>
-            <input type="text" class="form-control" id="nama_karyawan" name="nama_karyawan" value="{{ $transaction->nama_karyawan }}" required>
-        </div>
         <div class="mb-3">
             <label for="nama_barang" class="form-label">Nama Barang:</label>
             <input type="text" class="form-control" id="nama_barang" name="nama_barang" value="{{ $transaction->nama_barang }}" required>
@@ -33,6 +28,13 @@
             <label for="subtotal" class="form-label">Subtotal:</label>
             <input type="number" class="form-control" id="subtotal" name="subtotal" value="{{ $transaction->subtotal }}" readonly>
         </div>
+
+        <div class="form-group">
+            <label for="netto">Netto</label>
+            <input type="text" name="netto" class="form-control" value="{{ $transaction->netto }}" required>
+
+        </div>
+
         <div class="mb-3">
             <label for="metode_pembayaran" class="form-label">Metode Pembayaran:</label>
             <select name="metode_pembayaran" id="metode_pembayaran" class="form-select" required>

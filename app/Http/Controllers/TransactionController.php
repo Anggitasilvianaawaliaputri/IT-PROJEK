@@ -3,72 +3,97 @@
 namespace App\Http\Controllers;
 
 use App\Models\Transaction;
+use App\Models\Agent;
+use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class TransactionController extends Controller
 {
-
-    public function destroy($id)
-    {
-    $transaction = Transaction::findOrFail($id);
-    $transaction->delete();
-
-    return redirect()->route('transaction.index')->with('success', 'Transaksi berhasil dihapus!');
-}
-
-
-
-    public function store(Request $request)
-    {
-        // Validasi data yang diterima
-        $validatedData = $request->validate([
-            'customer_name' => 'required|string|max:255',
-            'item_name' => 'required|string|max:255',
-            'quantity' => 'required|integer|min:1',
-            'price' => 'required|numeric|min:0',
-        ]);
-
-        // Simpan data transaksi ke database
-        Transaction::create($validatedData);
-
-        // Redirect ke halaman daftar transaksi dengan pesan sukses
-        return redirect()->route('transaction.index')->with('success', 'Transaksi berhasil ditambahkan!');
-    }
-
-    public function create()
-    {
-        // Menampilkan form untuk menambah transaksi baru
-        return view('transaction.create');
-    }
-
-
+    // Tampilkan daftar transaksi
     public function index()
     {
-        // Mengambil semua data transaksi dari database
-        $transactions = transaction::all();
-
-        // Mengembalikan view transactions.index dengan data
-        return view('transaction.index', compact('transactions'));
+        $transactions = Transaction::all(); // Ambil data transaksi (contoh)
+        return view('transactions.index', compact('transactions'));
     }
 
-    public function edit($id)
+    // Tampilkan form tambah transaksi
+    public function create()
     {
-        $transaction = transaction::findOrFail($id);
-        return view('transaction.edit', compact('transaction'));
+        $agents = Agent::all();
+        $categories = Category::all();
+
+        return view('transactions.create', compact('agents', 'categories'));
     }
-    
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'customer_name' => 'required|string|max:255',
-            'item_name' => 'required|string|max:255',
-            'quantity' => 'required|integer',
-            'price' => 'required|numeric|min:0',
-        ]);
-    
-        $transaction = Transaction::findOrFail($id);
-        $transaction->update($request->all());
-    
-        return redirect()->route('transaction.index')->with('success', 'Transaksi berhasil diperbarui.');
+
+    // Tampilkan detail transaksi
+    public function show($id)
+{
+    try {
+        $transaction = Transaction::with(['agent', 'category'])->findOrFail($id);
+        return view('transactions.show', compact('transaction'));
+    } catch (\Exception $e) {
+        Log::error('Error fetching transaction:', ['error' => $e->getMessage()]);
+        return redirect()->route('transactions.index')->withErrors(['message' => 'Transaksi tidak ditemukan.']);
+    }
 }
+
+
+    // Simpan transaksi baru
+    public function store(Request $request)
+    {
+        $validatedData = $request->validate([
+            'agent_id' => 'required|exists:agents,id',
+            'item_name' => 'required|string',
+            'item_image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+            'netto' => 'required|numeric',
+            'unit' => 'required|in:kg,g,mg,l',
+            'category_id' => 'required|exists:categories,id',
+            'unit_price' => 'required|numeric',
+            'quantity' => 'required|integer',
+            'discount' => 'nullable|numeric|min:0|max:100',
+            'purchase_date' => 'required|date',
+            'payment_method' => 'required|in:cash,bank_transfer',
+        ]);
+
+        try {
+            // Jika ada file gambar, simpan
+            if ($request->hasFile('item_image')) {
+                $validatedData['item_image'] = $request->file('item_image')->store('images', 'public');
+            }
+
+            // Hitung total harga
+            $discount = $validatedData['discount'] ?? 0;
+            $validatedData['total_price'] = ($validatedData['unit_price'] * $validatedData['quantity']) * (1 - ($discount / 100));
+
+            // Simpan transaksi ke database
+            Transaction::create($validatedData);
+
+            return redirect()->route('transactions.index')->with('success', 'Transaksi berhasil disimpan.');
+        } catch (\Exception $e) {
+            Log::error('Error saving transaction:', ['error' => $e->getMessage()]);
+            return redirect()->back()->withErrors(['message' => 'Terjadi kesalahan saat menyimpan transaksi.']);
+        }
+    }
+
+    // Simpan gambar transaksi
+    public function saveTransactionImage(Request $request)
+    {
+        try {
+            $imageData = $request->input('image');
+            $imageData = str_replace('data:image/jpeg;base64,', '', $imageData);
+            $imageData = base64_decode($imageData);
+
+            $fileName = 'transaction_image_' . time() . '.jpg';
+            $filePath = 'uploads/transaction_images/' . $fileName;
+            Storage::disk('public')->put($filePath, $imageData);
+
+            $imageUrl = asset('storage/' . $filePath);
+            return response()->json(['url' => $imageUrl]);
+        } catch (\Exception $e) {
+            Log::error('Error saving transaction image:', ['error' => $e->getMessage()]);
+            return response()->json(['error' => 'Gagal menyimpan gambar.'], 500);
+        }
+    }
 }

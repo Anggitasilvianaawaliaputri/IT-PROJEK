@@ -1,25 +1,59 @@
 <?php
 
+
+use App\Models\Item;
 use App\Models\Post;
 use App\Models\Account;
 use App\Models\Laporan;
 use App\Models\Product;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\AgentController;
-use App\Http\Controllers\LoginController;
-use App\Http\Controllers\SalesController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RevenueController;
 use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ProductScoreController;
+
+
+
+
+// Menampilkan daftar produk
+Route::get('/product', [ProductController::class, 'index'])->name('product.index');
+// Proses keputusan dan simpan hasil ranking
+Route::post('/product/process-decision', [ProductController::class, 'processDecision'])->name('decision.process');
+// Menampilkan halaman hasil ranking
+Route::get('/result', [ProductController::class, 'showResult'])->name('result.index');
+
+
+// Menampilkan formulir untuk menghitung pendapatan
+Route::get('/revenue', [RevenueController::class, 'indexForm'])->name('revenue.form');
+// Menyimpan dan menghitung pendapatan (metode POST)
+Route::post('/revenue', [RevenueController::class, 'index'])->name('revenue.index');
+
+
+
+
+
+Route::get('/sale/autocomplete', function (Request $request) {
+    $search = $request->input('term'); // Ambil teks pencarian dari input
+    
+    $results = Item::where('nama_barang', 'LIKE', "%{$search}%")
+                ->pluck('nama_barang') // Ambil kolom nama_barang
+                ->toArray(); // Konversi ke array
+
+    return response()->json($results);
+})->name('sale.autocomplete');
+
+Route::get('/sale/pendapatan', [SaleController::class, 'pendapatanForm'])->name('sale.pendapatan.form');
+Route::post('/sale/pendapatan', [SaleController::class, 'pendapatan'])->name('sale.pendapatan');
+
 
 
 // Rute untuk mencetak laporan pendapatan
@@ -87,6 +121,7 @@ Route::get('/Transaction/{id}/edit', [TransactionController::class, 'edit'])->na
 Route::put('/Transaction/{id}', [TransactionController::class, 'update'])->name('transaction.update');
 Route::delete('/Transaction/{id}', [TransactionController::class, 'destroy'])->name('transaction.destroy');
 Route::resource('transactions', TransactionController::class);
+
 
 // Menampilkan daftar transaksi
 Route::get('/sale', [SaleController::class, 'index'])->name('sale.index');

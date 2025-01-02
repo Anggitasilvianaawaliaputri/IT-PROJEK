@@ -13,15 +13,4 @@ class ReportController extends Controller
         $pendapatan = Revenue::all();
         return view('report.index', compact('pendapatan'));
     }
-
-    public function print($id)
-    {
-        $pendapatan = Revenue::findOrFail($id);
-    
-        // Pastikan nilai pendapatan selalu numerik
-        $pendapatan->pendapatan = is_numeric($pendapatan->pendapatan) ? (float) $pendapatan->pendapatan : 0;
-    
-        return view('report.print', compact('pendapatan'));
-    }
-    
 }
