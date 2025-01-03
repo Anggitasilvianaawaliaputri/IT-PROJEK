@@ -6,6 +6,7 @@
 
     <!-- Tabel Laporan Pendapatan -->
     <table class="table table-bordered mt-4">
+        <table class="table table-bordered text-center">
         <thead>
             <tr>
                 <th>No</th>

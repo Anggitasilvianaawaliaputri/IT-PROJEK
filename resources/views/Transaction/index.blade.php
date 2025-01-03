@@ -4,6 +4,7 @@
 <h1>Daftar Transaksi</h1>
 <a href="{{ route('transactions.create') }}" class="btn mb-3" style="background-color: #9fb873; color: white; border-color: #9fb873;">Tambah Transaksi</a>
 <table class="table table-bordered">
+    <table class="table table-bordered text-center">
     <thead>
         <tr>
             <th>Nama Agen</th>

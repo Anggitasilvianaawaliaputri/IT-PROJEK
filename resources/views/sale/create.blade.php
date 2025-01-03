@@ -9,7 +9,7 @@
             <label for="nama_barang" class="form-label">Nama Barang</label>
             <input type="text" name="nama_barang" id="nama_barang" class="form-control" placeholder="Cari nama barang..." required>
         </div>
-             
+            
         <div class="mb-3">
             <label>Tanggal</label>
             <input type="date" name="tanggal" class="form-control" required>
@@ -36,6 +36,7 @@
             </select>
         </div>
         <button type="submit" class="btn btn-primary">Simpan Transaksi</button>
+        <a href="{{ route('sale.index') }}" class="btn btn-secondary">Kembali</a>
     </form>
 </div>
 @endsection
