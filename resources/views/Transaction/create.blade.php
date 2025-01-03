@@ -6,7 +6,7 @@
         <h1>Tambah Transaksi</h1>
     </div>
 
-    <form action="{{ route('transactions.store') }}" method="POST" enctype="multipart/form-data" class="bg-white p-5 shadow rounded">
+    <form action="{{ route('transaction.store') }}" method="POST" enctype="multipart/form-data" class="bg-white p-5 shadow rounded">
         @csrf
         <div class="mb-3">
             <label for="agent_id" class="form-label">Agen</label>
