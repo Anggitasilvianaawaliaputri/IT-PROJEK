@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h1 class="text-center mb-4">Tambah Barang</h1>
+    
 
     <form action="{{ route('items.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
