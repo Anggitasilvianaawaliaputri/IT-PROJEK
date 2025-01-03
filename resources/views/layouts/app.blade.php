@@ -20,30 +20,32 @@
 
     <!-- Custom CSS -->
     <style>
-        body {
+       body {
             font-family: 'Poppins', sans-serif;
             background-color: #f7f8fa;
             margin: 0;
             padding: 0;
+            font-size: 14px; /* Ukuran font lebih kecil */
         }
 
+        /* Sidebar Styling */
         .sidebar {
-            width: 250px;
+            width: 220px; /* Lebar lebih kecil */
             height: 100vh;
             background-color: #061a11;
             position: fixed;
             top: 0;
             left: 0;
-            padding: 20px 10px;
+            padding: 10px 8px; /* Padding lebih kecil */
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
         }
 
         .sidebar .logo {
-            font-size: 1.5rem;
+            font-size: 1.2rem; /* Ukuran font lebih kecil */
             font-weight: bold;
             color: #9fb873;
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 15px; /* Margin lebih kecil */
         }
 
         .sidebar .menu-item {
@@ -52,34 +54,36 @@
         }
 
         .sidebar .menu-item li {
-            margin-bottom: 20px;
+            margin-bottom: 10px; /* Jarak antar item lebih kecil */
         }
 
         .sidebar .menu-item a {
             text-decoration: none;
-            font-size: 1rem;
+            font-size: 0.9rem; /* Ukuran font lebih kecil */
             color: #ecf0f1;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px; /* Jarak ikon dan teks lebih kecil */
+            padding: 6px 8px; /* Padding lebih kecil */
+            border-radius: 8px; /* Border radius lebih kecil */
             transition: all 0.3s ease;
         }
 
         .sidebar .menu-item a:hover {
-            color: #9fb873;
+            color: #ffffff;
+            background-color: #9fb873;
         }
 
         .sidebar .menu-item a.active {
             color: #ffffff;
             background-color: #9fb873;
-            padding: 10px;
-            border-radius: 25px;
             font-weight: bold;
         }
 
+        /* Main Content Styling */
         .main-content {
-            margin-left: 250px;
-            padding: 20px;
+            margin-left: 220px; /* Sesuai lebar sidebar */
+            padding: 10px; /* Padding lebih kecil */
             background-color: #fff;
             min-height: 100vh;
         }
@@ -87,7 +91,7 @@
         header {
             background-color: #9fb873;
             color: #fff;
-            padding: 15px 20px;
+            padding: 8px 12px; /* Padding lebih kecil */
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -95,28 +99,43 @@
         }
 
         header h1 {
-            font-size: 1.5rem;
+            font-size: 1.2rem; /* Ukuran font lebih kecil */
             margin: 0;
+        }
+
+        header .profile img {
+            width: 40px; /* Ukuran lebih kecil */
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        footer {
+            text-align: center;
+            padding: 5px 0; /* Padding lebih kecil */
+            font-size: 0.8rem; /* Ukuran font lebih kecil */
+            color: #666;
+            background-color: #f1f1f1;
+            margin-top: 15px; /* Margin lebih kecil */
         }
 
         .profile-section {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px; /* Margin lebih kecil */
         }
 
         .profile-section img {
-            width: 70px;
-            height: 70px;
+            width: 60px; /* Ukuran lebih kecil */
+            height: 60px;
             border-radius: 50%;
             object-fit: cover;
-            margin-bottom: 10px;
+            margin-bottom: 5px; /* Margin lebih kecil */
         }
 
         .profile-section .btn {
             background-color: #9fb873;
             color: white;
             border: none;
-            padding: 10px 15px;
+            padding: 8px 10px; /* Padding lebih kecil */
             border-radius: 5px;
             text-decoration: none;
         }
@@ -133,7 +152,7 @@
 
         <!-- Profile Section -->
         <div class="profile-section">
-            <img src="https://www.mediarale.com/wp-content/uploads/2022/11/Compress_20221106_185806_6073.jpg" alt="Profile" class="rounded-circle mb-2">
+            <img src="https://png.pngtree.com/png-vector/20230320/ourlarge/pngtree-neon-shopping-cart-icon-for-supermarket-advertising-background-flyer-purchase-vector-png-image_50959812.jpg" alt="Profile" class="rounded-circle mb-2">
         </div>
 
         <!-- Sidebar Menu Items -->
@@ -158,10 +177,42 @@
             <h1>@yield('title', '')</h1>
         </header>
 
-        <main class="container mt-4">
+        <main class="container mt-3">
             @yield('content')
         </main>
     </div>
+
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+
+    <!-- Show Pop-up based on session flash messages -->
+    <script>
+        @if(session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Sukses!',
+                text: '{{ session('success') }}',
+                showConfirmButton: false,
+                timer: 2000
+            });
+        @elseif(session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal!',
+                text: '{{ session('error') }}',
+                showConfirmButton: false,
+                timer: 2000
+            });
+        @elseif(session('warning'))
+            Swal.fire({
+                icon: 'warning',
+                title: 'Peringatan!',
+                text: '{{ session('warning') }}',
+                showConfirmButton: false,
+                timer: 2000
+            });
+        @endif
+    </script>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
