@@ -26,7 +26,7 @@
                 <th>Subtotal</th>
                 <th>Netto</th>
                 <th>Metode Pembayaran</th>
-                <th>Aksi</th>
+            
             </tr>
         </thead>
         <tbody>
@@ -46,19 +46,7 @@
                         @endif
                     </td>
                     <td>{{ $data->metode_pembayaran }}</td>
-                    <td>
-                        <!-- Tombol Edit -->
-                        <div class="d-flex justify-content-between">
-                        <a href="{{ route('sale.edit', $data->id) }}" class="btn btn-warning">Edit</a>
-                        
-                        <!-- Tombol Hapus -->
-                        <form action="{{ route('sale.destroy', $data->id) }}" method="POST" class="d-inline">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger" onclick="return confirm('Yakin ingin menghapus?')">Hapus</button>
-                        </form>
-                    </div>
-                    </td>
+                   
                 </tr>
             @endforeach
         </tbody>

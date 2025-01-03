@@ -9,18 +9,22 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
-{
-    Schema::table('sales', function (Blueprint $table) {
-        $table->dropColumn('nama_karyawan');
-    });
-}
+    public function up(): void
+    {
+        if (Schema::hasColumn('sales', 'nama_karyawan')) {
+            Schema::table('sales', function (Blueprint $table) {
+                $table->dropColumn('nama_karyawan');
+            });
+        }
+    }
 
-public function down()
-{
-    Schema::table('sales', function (Blueprint $table) {
-        $table->string('nama_karyawan')->nullable(); // Atau tipe asli kolom
-    });
-}
-
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::table('sales', function (Blueprint $table) {
+            $table->string('nama_karyawan')->nullable(); // Tipe asli kolom
+        });
+    }
 };
