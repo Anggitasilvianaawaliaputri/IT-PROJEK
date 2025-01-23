@@ -2,10 +2,10 @@
 
 @section('content')
 <div class="container">
-    <h2>Edit Transaksi</h2>
+    <h2>Edit Penjualan</h2>
 
     <!-- Form to edit the transaction -->
-    <form action="{{ route('sale.update', $transaction->id) }}" method="POST">
+    <form action="{{ route('penjualan.update', $transaction->id) }}" method="POST"> <!-- Rute diubah ke penjualan.update -->
         @csrf
         @method('PUT')
         <div class="mb-3">
@@ -58,7 +58,6 @@
     </form>
 </div>
 <script>
-
     document.getElementById('jumlah').addEventListener('input', calculateSubtotal);
     document.getElementById('harga').addEventListener('input', calculateSubtotal);
 

@@ -20,8 +20,11 @@ class Item extends Model
 
     public function transactions()
     {
-        return $this->hasMany(AgentTransaction::class);
+        return $this->belongsToMany(Transaction::class, 'transaction_item', 'item_id', 'transaction_id')
+                    ->withPivot('quantity', 'unit_price', 'total_price')
+                    ->withTimestamps();
     }
+    
 
     // Relasi ke Category
     public function category()
@@ -30,4 +33,3 @@ class Item extends Model
 }
 
 }
-

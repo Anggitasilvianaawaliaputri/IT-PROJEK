@@ -12,7 +12,7 @@
                 <th>Nama Barang</th>
                 <th>Harga</th>
                 <th>Jumlah</th>
-                <th>Netto</th>  <!-- Kolom Netto ditambahkan -->
+                <th>Netto</th> <!-- Kolom Netto -->
             </tr>
         </thead>
         <tbody>
@@ -22,8 +22,7 @@
                     <td>{{ $product->nama }}</td>
                     <td>Rp {{ number_format($product->harga, 0, ',', '.') }}</td>
                     <td>{{ $product->jumlah }}</td>
-                    <td>{{ number_format($product->netto, 0, ',', '.') }}</td> <!-- Menampilkan Netto -->
-                    
+                    <td>{{ number_format($product->netto, 0, ',', '.') }}</td> <!-- Tampilkan Netto -->
                 </tr>
             @endforeach
         </tbody>

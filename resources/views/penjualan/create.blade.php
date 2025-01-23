@@ -2,12 +2,12 @@
 
 @section('content')
 <div class="container mt-5">
-    <h1 class="text-center">Tambah Transaksi</h1>
-    <form action="{{ route('sale.store') }}" method="POST">
+    <h1 class="text-center">Tambah Penjualan</h1>
+    <form action="{{ route('penjualan.store') }}" method="POST"> <!-- Rute diubah ke penjualan.store -->
         @csrf
         <div class="mb-3">
             <label for="nama_barang" class="form-label">Nama Barang</label>
-            <input type="text" name="nama_barang" id="nama_barang" class="form-control" placeholder="Cari nama barang..." required>
+            <input type="text" name="nama_barang" id="nama_barang" class="form-control" placeholder="Masukkan nama barang..." required>
         </div>
         
         <div class="mb-3">
@@ -48,23 +48,7 @@
             </select>
         </div>
         <button type="submit" class="btn btn-primary">Simpan Transaksi</button>
-        <a href="{{ route('sale.index') }}" class="btn btn-secondary">Kembali</a>
+        <a href="{{ route('penjualan.index') }}" class="btn btn-secondary">Kembali</a> <!-- Rute diubah ke penjualan.index -->
     </form>
 </div>
-@endsection
-
-@section('scripts')
-<!-- jQuery dan jQuery UI -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
-<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
-
-<script>
-$(document).ready(function() {
-    $("#nama_barang").autocomplete({
-        source: "{{ route('sale.autocomplete') }}", // Route untuk mencari data
-        minLength: 1
-    });
-});
-</script>
 @endsection

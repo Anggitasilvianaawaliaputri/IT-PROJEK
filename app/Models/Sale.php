@@ -19,6 +19,7 @@ class Sale extends Model
         'jumlah',
         'subtotal',
         'netto',
+        'satuan',
         'metode_pembayaran',
     ];
 
@@ -26,7 +27,10 @@ class Sale extends Model
     {
         return $this->belongsTo(Sale::class, 'nama_barang', 'nama_barang');
     }
-
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_id');
+    }
     /**
      * Event model untuk sinkronisasi dengan tabel products.
      */

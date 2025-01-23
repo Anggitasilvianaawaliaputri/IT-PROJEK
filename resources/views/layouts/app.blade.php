@@ -161,10 +161,10 @@
             <li><a href="agents" class="{{ Request::is('agents*') ? 'active' : '' }}"><i class="bi bi-people"></i> Agen</a></li>
             <li><a href="categories" class="{{ Request::is('categories*') ? 'active' : '' }}"><i class="bi bi-tag"></i> Kategori</a></li>
             <li><a href="Transaction" class="{{ Request::is('Transaction*') ? 'active' : '' }}"><i class="bi bi-basket"></i> Transaksi</a></li>
-            <li><a href="sale" class="{{ Request::is('sale*') ? 'active' : '' }}"><i class="bi bi-cart-check"></i> Penjualan</a></li>
+            <li><a href="penjualan" class="{{ Request::is('penjualan*') ? 'active' : '' }}"><i class="bi bi-cart-check"></i> Penjualan</a></li>
             <li><a href="report" class="{{ Request::is('report*') ? 'active' : '' }}"><i class="bi bi-file-earmark-text"></i> Laporan</a></li>
             <li><a href="accounts" class="{{ Request::is('accounts*') ? 'active' : '' }}"><i class="bi bi-person-plus"></i> Tambah Akun</a></li>
-            <li><a href="products" class="{{ Request::is('products*') ? 'active' : '' }}"><i class="bi bi-basket3"></i> Produk</a></li>
+            <li><a href="tpk" class="{{ Request::is('tpk*') ? 'active' : '' }}"><i class="bi bi-basket3"></i> Produk</a></li>
         </ul>
 
         <!-- Logout Button -->

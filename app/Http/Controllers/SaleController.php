@@ -9,11 +9,6 @@ use Illuminate\Http\Request;
 
 class SaleController extends Controller
 {
-
-
-
-    
-
     public function pendapatanForm()
     {
     return view('sale.pendapatan');
@@ -47,9 +42,6 @@ class SaleController extends Controller
     return redirect()->route('report.index')->with('success', 'Pendapatan berhasil dihitung.');
 }
 
-
-    
-
     public function index()
     {
         $penjualan = Sale::all();
@@ -69,7 +61,8 @@ class SaleController extends Controller
             'tanggal' => 'required|date',
             'harga' => 'required|numeric|min:0',
             'jumlah' => 'required|numeric|min:1',
-            'netto' => 'required|string|max:255', 
+            'netto' => 'required|numeric|max:255', 
+            'satuan' => 'required|string|max:255', 
             'metode_pembayaran' => 'required|string|max:255',
         ]);
 
@@ -94,7 +87,8 @@ class SaleController extends Controller
             'tanggal' => 'required|date',
             'harga' => 'required|numeric|min:0',
             'jumlah' => 'required|numeric|min:1',
-            'netto' => 'required|string|max:255', 
+            'netto' => 'required|numeric|max:255', 
+            'satuan' => 'required|string|max:255', 
             'metode_pembayaran' => 'required|string|max:255',
         ]);
 
@@ -114,7 +108,6 @@ class SaleController extends Controller
         return redirect()->route('sale.index')->with('success', 'Transaksi berhasil dihapus.');
     }
 
-    
     public function show(Sale $penjualan)
     {
         return view('sale.show', compact('penjualan'));

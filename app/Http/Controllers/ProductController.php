@@ -11,13 +11,13 @@ class ProductController extends Controller
      * Tampilkan daftar produk.
      */
     public function index()
-    {
-        // Ambil semua data produk
-        $products = Product::all();
+{
+    // Ambil semua produk beserta transaksi penjualannya
+    $products = Product::with('sales')->get();
+    
+    return view('product.index', compact('products'));
+}
 
-        // Tampilkan halaman produk
-        return view('product.index', compact('products'));
-    }
 
     /**
      * Proses penentuan keputusan dan ranking produk.
@@ -60,7 +60,7 @@ class ProductController extends Controller
         foreach ($pairwiseComparison as $crit => $row) {
             $weights[$crit] = array_sum(array_map(fn($value, $sum) => $value / $sum, $row, $sums)) / count($criteria);
         }
-
+    
         // SAW: Normalisasi data
         $maxValues = [
             'harga' => $products->max('harga'),
@@ -71,14 +71,14 @@ class ProductController extends Controller
             'harga' => $products->min('harga'),
             'netto' => $products->min('netto'),
         ];
-
+    
         $normalizedProducts = [];
         foreach ($products as $product) {
-            // Cek pembagian dengan nol pada normalisasi
-            $hargaNormalized = $product->harga > 0 ? $minValues['harga'] / $product->harga : 0; // Hindari pembagian dengan nol
-            $jumlahNormalized = $product->jumlah > 0 ? $product->jumlah / $maxValues['jumlah'] : 0; // Hindari pembagian dengan nol
-            $nettoNormalized = $product->netto > 0 ? $product->netto / $maxValues['netto'] : 0; // Hindari pembagian dengan nol
-
+            // Normalisasi harga, jumlah, dan netto
+            $hargaNormalized = $product->harga > 0 ? $minValues['harga'] / $product->harga : 0;
+            $jumlahNormalized = $product->jumlah > 0 ? $product->jumlah / $maxValues['jumlah'] : 0;
+            $nettoNormalized = $product->netto > 0 ? $product->netto / $maxValues['netto'] : 0.1; // Pastikan tidak nol
+    
             $normalizedProducts[] = (object) [
                 'nama' => $product->nama,
                 'harga' => $hargaNormalized, // Normalisasi untuk kriteria cost
@@ -89,25 +89,26 @@ class ProductController extends Controller
                 'original_netto' => $product->netto,
             ];
         }
-
+    
         // Hitung skor akhir
         foreach ($normalizedProducts as &$product) {
             $product->score = $product->harga * $weights['harga'] + 
                               $product->jumlah * $weights['jumlah'] + 
                               $product->netto * $weights['netto'];
         }
-
+    
         // Urutkan produk berdasarkan skor
         usort($normalizedProducts, fn($a, $b) => $b->score <=> $a->score);
-
+    
         // Tambahkan ranking
         $ranking = 1;
         foreach ($normalizedProducts as &$product) {
             $product->ranking = $ranking++;
         }
-
+    
         return $normalizedProducts;
     }
+    
 
     /**
      * Tampilkan halaman hasil ranking produk.

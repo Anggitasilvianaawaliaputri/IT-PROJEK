@@ -2,7 +2,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Sale;
+use App\Models\Penjualan;
 use App\Models\Revenue;
 
 class RevenueController extends Controller
@@ -23,7 +23,7 @@ class RevenueController extends Controller
         ]);
 
         // Ambil data transaksi berdasarkan rentang tanggal
-        $pendapatan = Sale::whereBetween('tanggal', [$request->tanggal_awal, $request->tanggal_akhir])
+        $pendapatan = Penjualan::whereBetween('tanggal', [$request->tanggal_awal, $request->tanggal_akhir])
             ->sum('subtotal'); // Hitung total pendapatan
 
         // Simpan data pendapatan ke tabel revenue

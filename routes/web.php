@@ -20,6 +20,23 @@ use App\Http\Controllers\RevenueController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ProductScoreController;
+use App\Http\Controllers\PenjualanController;
+use App\Http\Controllers\TPKController;
+
+Route::get('/tpk', [TPKController::class, 'index'])->name('tpk.index');
+Route::get('/result', [TPKController::class, 'ranking'])->name('result.index');
+// Route untuk halaman TPK
+
+
+Route::prefix('penjualan')->group(function () {
+    Route::get('/', [PenjualanController::class, 'index'])->name('penjualan.index'); // Menampilkan daftar transaksi
+    Route::get('/create', [PenjualanController::class, 'create'])->name('penjualan.create'); // Form tambah transaksi
+    Route::post('/', [PenjualanController::class, 'store'])->name('penjualan.store'); // Proses simpan transaksi
+    Route::get('/{id}/edit', [PenjualanController::class, 'edit'])->name('penjualan.edit'); // Form edit transaksi
+    Route::put('/{id}', [PenjualanController::class, 'update'])->name('penjualan.update'); // Proses update transaksi
+    Route::delete('/{id}', [PenjualanController::class, 'destroy'])->name('penjualan.destroy'); // Proses hapus transaksi
+});
+
 
 
 
@@ -149,4 +166,3 @@ Route::delete('/products/{id}', [ProductController::class, 'destroy'])->name('pr
 Route::get('/products/statistics', [ProductController::class, 'statistics'])->name('products.statistics');
 Route::get('products/result', [ProductController::class, 'result'])->name('products.result');
 Route::get('/hitung-skor', [ProductController::class, 'hitungSkor']);
-

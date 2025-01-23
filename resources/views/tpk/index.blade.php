@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container mt-5">
-    <h1 class="text-center">Ranking Produk Terbaik</h1>
+    <h1 class="text-center">Data Penjualan</h1>
 
     <table class="table table-bordered text-center">
         <thead>
@@ -12,7 +12,6 @@
                 <th>Harga</th>
                 <th>Total Jumlah</th>
                 <th>Netto</th>
-                <th>Nilai SAW</th>
             </tr>
         </thead>
         <tbody>
@@ -23,10 +22,14 @@
                     <td>Rp {{ number_format($item->harga, 0, ',', '.') }}</td>
                     <td>{{ $item->total_jumlah }}</td>
                     <td>{{ number_format($item->netto, 0, ',', '.') }}</td>
-                    <td>{{ number_format($item->saw_value, 4) }}</td>
                 </tr>
             @endforeach
         </tbody>
     </table>
+
+    <div class="text-center mt-4">
+        <!-- Button untuk menuju halaman ranking -->
+        <a href="{{ route('result.index') }}" class="btn btn-primary">Ranking Produk</a>
+    </div>
 </div>
 @endsection
